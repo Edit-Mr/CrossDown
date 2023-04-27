@@ -18,7 +18,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="https://EM-Tec.github.io/icons/favicon-32x32.png">
     <title>CrossDown Display</title>
     <style>
-        :root {
+        body {
             --nord0: #2E3440;
             --nord1: #3B4252;
             --nord2: #434C5E;
@@ -35,6 +35,8 @@
             --nord13: #EBCB8B;
             --nord14: #A3BE8C;
             --nord15: #B48EAD;
+            --black: #000;
+            --line: #4C566A;
         }
 
         * {
@@ -69,14 +71,14 @@
 
         /* styles */
         b,
-        h1,
-        h2,
+        section h1,
+        section h2,
         h3,
         h4,
         h5,
         h6 {
             color: var(--nord6);
-            border-bottom: var(--nord3) 2px solid;
+            border-bottom: var(--line) 2px solid;
             margin-bottom: 1rem;
         }
 
@@ -100,6 +102,17 @@
         blockquote {
             border-left: var(--nord9) 2px solid;
             padding-left: 1rem;
+        }
+
+        [data-theme="light"] body {
+            --nord4: #2E3440;
+            --nord5: #3B4252;
+            --nord6: #4C566A;
+            --nord0: #D8DEE9;
+            --nord1: #E5E9F0;
+            --nord3: #ECEFF4;
+            --black: #4a4a4a63;
+            --line: #4c566a49;
         }
     </style>
 </head>

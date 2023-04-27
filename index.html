@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html data-theme="dark">
 
 <head>
     <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -18,7 +18,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="https://EM-Tec.github.io/icons/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="https://EM-Tec.github.io/icons/favicon-32x32.png">
     <style>
-        :root {
+        body {
             --nord0: #2E3440;
             --nord1: #3B4252;
             --nord2: #434C5E;
@@ -35,6 +35,8 @@
             --nord13: #EBCB8B;
             --nord14: #A3BE8C;
             --nord15: #B48EAD;
+            --black: #000;
+            --line: #4C566A;
         }
 
         * {
@@ -57,7 +59,7 @@
             display: flex;
             align-items: center;
             padding: 0px 1.5em;
-            box-shadow: #000 0px 0px 1rem;
+            box-shadow: var(--black) 0px 0px 1rem;
         }
 
         nav h1 {
@@ -98,7 +100,7 @@
             border: none;
             border-radius: 1rem;
             padding: 2rem;
-            box-shadow: #000 0px 0px 1rem;
+            box-shadow: var(--black) 0px 0px 1rem;
 
         }
 
@@ -277,7 +279,7 @@
         h5,
         h6 {
             color: var(--nord6);
-            border-bottom: var(--nord3) 2px solid;
+            border-bottom: var(--line) 2px solid;
             margin-bottom: 1rem;
         }
 
@@ -303,11 +305,19 @@
             padding-left: 1rem;
         }
 
-        @media (prefers-color-scheme: light) {
-            .card {
-                --theme-primary: #bb85fc;
-                --theme-background: #111;
-            }
+        [data-theme="light"] body {
+            --nord4: #2E3440;
+            --nord5: #3B4252;
+            --nord6: #4C566A;
+            --nord0: #D8DEE9;
+            --nord1: #E5E9F0;
+            --nord3: #ECEFF4;
+            --black: #4a4a4a63;
+            --line: #4c566a49;
+        }
+
+        [data-theme="light"] nav img {
+            filter: invert(31%) sepia(14%) saturate(732%) hue-rotate(182deg) brightness(99%) contrast(90%);
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -323,7 +333,7 @@
         <h2>A lightweight cross-window display markdown editor</h2>
         <div>
             <div><label>
-                    <input type="checkbox" />
+                    <input type="checkbox" id="light" />
                     <div class="switch">
                         <div></div>
                         <div></div><span></span>
@@ -378,6 +388,19 @@
             if (!otherWindow || otherWindow.closed) otherWindow = window.open('display.html', '_blank', 'width=500,height=500,location=1,menubar=0,toolbar=0,status=0,directories=0,scrollbars=1,resizable=1');
             otherWindow.document.getElementById('text-output').innerHTML = out;
         }
+        const lightCheckbox = document.getElementById("light");
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) lightCheckbox.click(); else document.documentElement.setAttribute("data-theme", "light");
+
+        lightCheckbox.addEventListener("change", function () {
+            if (lightCheckbox.checked) {
+                document.documentElement.setAttribute("data-theme", "dark");
+            } else {
+                document.documentElement.setAttribute("data-theme", "light");
+
+            }
+        });
+
+
     </script>
 </body>
 
