@@ -386,6 +386,7 @@
             var out = marked.parse(textInput.value);
             section.innerHTML = out;
             if (!otherWindow || otherWindow.closed) otherWindow = window.open('display.html', '_blank', 'width=500,height=500,location=1,menubar=0,toolbar=0,status=0,directories=0,scrollbars=1,resizable=1');
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) otherWindow.document.documentElement.setAttribute("data-theme", "light");
             otherWindow.document.getElementById('text-output').innerHTML = out;
         }
         const lightCheckbox = document.getElementById("light");
@@ -394,8 +395,10 @@
         lightCheckbox.addEventListener("change", function () {
             if (lightCheckbox.checked) {
                 document.documentElement.setAttribute("data-theme", "dark");
+                otherWindow.document.documentElement.setAttribute("data-theme", "dark");
             } else {
                 document.documentElement.setAttribute("data-theme", "light");
+                otherWindow.document.documentElement.setAttribute("data-theme", "light");
 
             }
         });
