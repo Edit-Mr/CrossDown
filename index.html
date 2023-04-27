@@ -47,16 +47,17 @@
         body,
         html {
             min-height: 100%;
-            background-color: #202124;
-            color: var(--nord5);
+            background-color: var(--nord0);
+            color: var(--nord6);
         }
 
         nav {
             height: 3.5em;
-            background-color: var(--nord2);
+            background-color: var(--nord3);
             display: flex;
             align-items: center;
             padding: 0px 1.5em;
+            box-shadow: #000 0px 0px 1rem;
         }
 
         nav h1 {
@@ -68,6 +69,18 @@
             color: var(--nord4);
             font-size: 1rem;
             font-weight: normal;
+        }
+
+        nav>div {
+            flex-grow: 1;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        nav img {
+            height: 1.5em;
+            filter: invert(1);
         }
 
         main {
@@ -84,7 +97,9 @@
             color: var(--nord4);
             border: none;
             border-radius: 1rem;
-            padding: 1rem;
+            padding: 2rem;
+            box-shadow: #000 0px 0px 1rem;
+
         }
 
         textarea {
@@ -98,15 +113,188 @@
 
         section {
             width: 20%;
+            overflow: scroll;
         }
 
         .resize-handle {
             width: 3px;
             padding: 0;
             height: 50%;
-            background-color: #ccc;
+            background-color: var(--nord4);
             cursor: ew-resize;
             margin: 4px;
+        }
+        nav > div > div{
+            position: relative;
+            width:1.5rem;
+            height:1.5rem;
+            margin-right: 1rem;
+        }
+
+        label {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            --c: translate(-50%, -50%);
+            transform: var(--c);
+        }
+
+        .switch {
+            position: relative;
+            left: 0;
+            top: 0;
+            width: 1.5rem;
+            height: 1.5rem;
+        }
+
+        label>input {
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: 5;
+            opacity: 0;
+        }
+
+        .switch span {
+            display: block;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: var(--c);
+            border-radius: 50%;
+            width: 70%;
+            height: 70%;
+            background: #ffac33;
+            border: 0.125rem solid var(--nord3);
+            transition: all ease 0.15s;
+        }
+
+        .switch div {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .switch div::before,
+        .switch div::after {
+            content: " ";
+            display: block;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: var(--c);
+            background: #ffac33;
+            width: 12%;
+            height: 110%;
+            border-radius: 10vmin;
+            transition: all ease 0.15s;
+        }
+
+        .switch div:nth-child(1)::before {
+            transform: var(--c) rotate(0deg);
+        }
+
+        .switch div:nth-child(1)::after {
+            transform: var(--c) rotate(45deg);
+            /*45deg increment each time*/
+        }
+
+        .switch div:nth-child(2)::before {
+            transform: var(--c) rotate(90deg);
+        }
+
+        .switch div:nth-child(2)::after {
+            transform: var(--c) rotate(135deg);
+        }
+
+        .switch::before,
+        .switch::after {
+            content: " ";
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: var(--c);
+            border-radius: 50%;
+            background: var(--nord3);
+            transition: all ease 0.15s;
+        }
+
+        .switch::before {
+            width: 0%;
+            height: 0%;
+            z-index: 10;
+        }
+
+        .switch::after {
+            width: 50%;
+            height: 50%;
+        }
+
+        input:checked~.switch span {
+            width: 100%;
+            /*width change*/
+            height: 100%;
+            /*height change*/
+            background: var(--nord9);
+            /*color change*/
+            /*we get a full moon*/
+        }
+
+        input:checked~.switch div::before,
+        input:checked~.switch div::after {
+            height: 50%;
+            /*we hide the sun-rays*/
+        }
+
+        input:checked~.switch::before {
+            /*we draw a var(--nord3) circle a left-top corner to show a half moon*/
+            left: 30%;
+            top: 30%;
+            width: 90%;
+            height: 90%;
+        }
+
+        input:checked~.switch::after {
+            /*we hide the sun outline*/
+            width: 0%;
+            height: 0%;
+        }
+
+        input:not(:checked)~.switch {
+            transform: rotate(180deg);
+            transition: all ease 2.15s 0.1s;
+        }
+
+        /* styles */
+        b,
+        section h1,
+        section h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            color: var(--nord6);
+            border-bottom: var(--nord3) 2px solid;
+            margin-bottom: 1rem;
+        }
+
+        a {
+            color: var(--nord8);
+        }
+
+        hr {
+            border-color: var(--nord4);
+            margin: 1rem 0;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        li {
+            margin-left: 1rem;
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -120,29 +308,34 @@
     <nav>
         <h1>CrossDown</h1>
         <h2>A simple Cross window display markdown editor</h2>
+        <div><div><label>
+            <input type="checkbox" />
+            <div class="switch">
+                <div></div>
+                <div></div><span></span>
+            </div>
+        </label></div><a href="https://github.com/Edit-Mr/CrossDown"><img
+                    src="https://edit-mr.github.io/img/icon/github.svg" alt="Github"></a></div>
     </nav>
     <main>
-        <textarea id="text-input" oninput="updateText()"></textarea>
+        <textarea id="text-input" oninput="updateText()"># Start typing anything here
+
+            And it will display over *there*</textarea>
         <div class="resize-handle"></div>
         <section></section>
     </main>
     <script>
+        let isResizing = false;
         var otherWindow;
         const resizeHandle = document.querySelector('.resize-handle');
         const textInput = document.getElementById('text-input');
         const section = document.querySelector('section');
-        function updateText() {
 
-            if (!otherWindow || otherWindow.closed) otherWindow = window.open('display.html', '_blank', 'width=500,height=500,location=1,menubar=0,toolbar=0,status=0,directories=0,scrollbars=1,resizable=1');
-            var out = marked.parse(textInput.value);
-            otherWindow.document.getElementById('text-output').innerHTML = out;
-            section.innerHTML = out;
-        }
-        updateText()
-        let isResizing = false;
         resizeHandle.addEventListener('mousedown', function (e) {
             isResizing = true;
+            console.log('mousedown')
         });
+
         document.addEventListener('mousemove', function (e) {
             if (isResizing) {
                 var width = document.querySelector("main").offsetWidth;
@@ -155,6 +348,22 @@
         document.addEventListener('mouseup', function (e) {
             isResizing = false;
         });
+
+        window.onunload = function () {
+            if (otherWindow && !otherWindow.closed) {
+                otherWindow.close();
+            }
+        };
+
+        function updateText() {
+            var out = marked.parse(textInput.value);
+            section.innerHTML = out;
+            if (!otherWindow || otherWindow.closed) otherWindow = window.open('display.html', '_blank', 'width=500,height=500,location=1,menubar=0,toolbar=0,status=0,directories=0,scrollbars=1,resizable=1');
+            otherWindow.document.getElementById('text-output').innerHTML = out;
+        }
+
+
+
 
     </script>
 </body>
