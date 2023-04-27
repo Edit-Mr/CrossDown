@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9R5PZG2VQG"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-9R5PZG2VQG');
+    </script>
+    <title>CrossDown</title>
+    <meta charset="UTF-8" />
+    <meta name="description" content="A simple Cross window display markdown editor">
+    <meta name="author" content="Edit Mr.">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://EM-Tec.github.io/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://EM-Tec.github.io/icons/favicon-32x32.png">
+    <style>
+        :root {
+            --nord0: #2E3440;
+            --nord1: #3B4252;
+            --nord2: #434C5E;
+            --nord3: #4C566A;
+            --nord4: #D8DEE9;
+            --nord5: #E5E9F0;
+            --nord6: #ECEFF4;
+            --nord7: #8FBCBB;
+            --nord8: #88C0D0;
+            --nord9: #81A1C1;
+            --nord10: #5E81AC;
+            --nord11: #BF616A;
+            --nord12: #D08770;
+            --nord13: #EBCB8B;
+            --nord14: #A3BE8C;
+            --nord15: #B48EAD;
+        }
+
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+            font-family: Arial, "微軟正黑體", Helvetica, sans-serif;
+        }
+
+        body,
+        html {
+            min-height: 100%;
+            background-color: #202124;
+            color: var(--nord5);
+        }
+
+        nav {
+            height: 3.5em;
+            background-color: var(--nord2);
+            display: flex;
+            align-items: center;
+            padding: 0px 1.5em;
+        }
+
+        nav h1 {
+            color: var(--nord7);
+        }
+
+        nav h2 {
+            margin-left: 1em;
+            color: var(--nord4);
+            font-size: 1rem;
+            font-weight: normal;
+        }
+
+        main {
+            margin: 2em;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: calc(100vh - 7.5em);
+        }
+
+        main>* {
+            height: 100%;
+            background-color: var(--nord1);
+            color: var(--nord4);
+            border: none;
+            border-radius: 1rem;
+            padding: 1rem;
+        }
+
+        textarea {
+            width: 80%;
+            resize: none;
+        }
+
+        textarea:focus {
+            outline: none;
+        }
+
+        section {
+            width: 20%;
+        }
+
+        .resize-handle {
+            width: 3px;
+            padding: 0;
+            height: 50%;
+            background-color: #ccc;
+            cursor: ew-resize;
+            margin: 4px;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+
+<body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NHBZ3RD" height="0" width="0"
+            style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    <nav>
+        <h1>CrossDown</h1>
+        <h2>A simple Cross window display markdown editor</h2>
+    </nav>
+    <main>
+        <textarea id="text-input" oninput="updateText()"></textarea>
+        <div class="resize-handle"></div>
+        <section></section>
+    </main>
+    <script>
+        var otherWindow;
+        const resizeHandle = document.querySelector('.resize-handle');
+        const textInput = document.getElementById('text-input');
+        const section = document.querySelector('section');
+        function updateText() {
+
+            if (!otherWindow || otherWindow.closed) otherWindow = window.open('display.html', '_blank', 'width=500,height=500,location=1,menubar=0,toolbar=0,status=0,directories=0,scrollbars=1,resizable=1');
+            var out = marked.parse(textInput.value);
+            otherWindow.document.getElementById('text-output').innerHTML = out;
+            section.innerHTML = out;
+        }
+        updateText()
+        let isResizing = false;
+        resizeHandle.addEventListener('mousedown', function (e) {
+            isResizing = true;
+        });
+        document.addEventListener('mousemove', function (e) {
+            if (isResizing) {
+                var width = document.querySelector("main").offsetWidth;
+                const newWidth = e.clientX - textInput.getBoundingClientRect().left;
+                textInput.style.width = `${newWidth / width * 100}%`;
+                section.style.width = `${(width - newWidth) / width * 100}%`;
+            }
+        });
+
+        document.addEventListener('mouseup', function (e) {
+            isResizing = false;
+        });
+
+    </script>
+</body>
+
+</html>
