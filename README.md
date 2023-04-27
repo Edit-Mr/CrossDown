@@ -1,6 +1,12 @@
+<div align="center">
+
 # CrossDown
 
 A lightweight cross-window display markdown editor.
+
+![](site.webp)
+
+</div>
 
 ## Credits
 
