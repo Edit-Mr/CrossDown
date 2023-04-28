@@ -72,13 +72,16 @@
         }
 
         /* styles */
-        b,
         h1,
         h2,
         h3,
         h4,
         h5,
-        h6 {
+        h6,
+        strong,
+        b,
+        em,
+        i {
             color: var(--nord6);
             border-bottom: var(--line) 2px solid;
             margin-bottom: 1rem;
@@ -98,12 +101,85 @@
         }
 
         li {
-            margin-left: 1rem;
+            margin: 0.5rem 1rem;
         }
 
         blockquote {
             border-left: var(--nord9) 2px solid;
             padding-left: 1rem;
+        }
+
+        /* Code blocks */
+        pre {
+            background-color: var(--nord2);
+            color: var(--nord6);
+            padding: 1rem;
+            border-radius: 1rem;
+            font-family: "Cascadia Code", monospace;
+            overflow-x: auto;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        pre code {
+            background-color: transparent;
+        }
+
+        code {
+            background-color: var(--nord3);
+            color: var(--nord6);
+            padding: 0.2rem 0.4rem;
+            border-radius: 1rem;
+            font-family: "Cascadia Code", monospace;
+        }
+
+        /* Lists */
+        ul,
+        ol {
+            margin-bottom: 1rem;
+        }
+
+        /* Images */
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Tables */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+
+        th,
+        td {
+            padding: 0.5rem;
+            border: 1px solid var(--nord4);
+        }
+
+        th {
+            background-color: var(--nord2);
+            color: var(--nord6);
+        }
+
+        /* Strikethrough */
+        del {
+            text-decoration: line-through;
+        }
+
+        /* Task lists */
+        .task-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .task-list-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .task-list-item-checkbox {
+            margin-right: 0.5rem;
         }
 
         [data-theme="light"] body {
