@@ -115,7 +115,8 @@
 
         section {
             width: 20%;
-            overflow: scroll;
+            overflow: hidden;
+            word-wrap: break-word;
         }
 
         .resize-handle {
@@ -270,6 +271,82 @@
             transition: all ease 2.15s 0.1s;
         }
 
+        button {
+            background-color: var(--nord9);
+            color: var(--nord6);
+            border: none;
+            border-radius: 1rem;
+            box-shadow: var(--nord2) 0px 0px 3px;
+            cursor: pointer;
+            height: 2rem;
+            padding: 0 1em;
+            line-height: 2rem;
+            margin-right: 1rem;
+            white-space: nowrap;
+        }
+
+        button:hover {
+            filter: brightness(1.2);
+        }
+
+        button:active {
+            background-color: var(--nord10);
+        }
+
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        section * {
+            max-width: 100%;
+        }
+
+        @keyframes shake {
+            0% {
+                transform: translate(1px, 1px) rotate(0deg);
+            }
+
+            10% {
+                transform: translate(-1px, -2px) rotate(-1deg);
+            }
+
+            20% {
+                transform: translate(-3px, 0px) rotate(1deg);
+            }
+
+            30% {
+                transform: translate(3px, 2px) rotate(0deg);
+            }
+
+            40% {
+                transform: translate(1px, -1px) rotate(1deg);
+            }
+
+            50% {
+                transform: translate(-1px, 2px) rotate(-1deg);
+            }
+
+            60% {
+                transform: translate(-3px, 1px) rotate(0deg);
+            }
+
+            70% {
+                transform: translate(3px, 1px) rotate(-1deg);
+            }
+
+            80% {
+                transform: translate(-1px, -1px) rotate(1deg);
+            }
+
+            90% {
+                transform: translate(1px, 2px) rotate(0deg);
+            }
+
+            100% {
+                transform: translate(1px, -2px) rotate(-1deg);
+            }
+        }
+
         /* styles */
         b,
         section h1,
@@ -319,6 +396,22 @@
         [data-theme="light"] nav img {
             filter: invert(31%) sepia(14%) saturate(732%) hue-rotate(182deg) brightness(99%) contrast(90%);
         }
+
+        /*mobile*/
+        @media screen and (max-aspect-ratio: 4/3) {
+            main {
+                flex-direction: column;
+            }
+
+            .resize-handle {
+                display: none;
+            }
+
+            main>* {
+                width: 100%;
+                height: calc(50% - 1rem);
+            }
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
@@ -332,6 +425,9 @@
         <h1>CrossDown</h1>
         <h2>A lightweight cross-window display markdown editor</h2>
         <div>
+            <button
+                onclick="otherWindow = window.open('display.html', '_blank', 'width=500,height=500,location=1,menubar=0,toolbar=0,status=0,directories=0,scrollbars=1,resizable=1')">Open
+                Viewer</button>
             <div><label>
                     <input type="checkbox" id="light" />
                     <div class="switch">
@@ -352,15 +448,15 @@
         </section>
     </main>
     <script>
+        //resize the text input
         let isResizing = false;
-        var otherWindow;
+        let otherWindow;
         const resizeHandle = document.querySelector('.resize-handle');
         const textInput = document.getElementById('text-input');
         const section = document.querySelector('section');
 
         resizeHandle.addEventListener('mousedown', function (e) {
             isResizing = true;
-            console.log('mousedown')
         });
 
         document.addEventListener('mousemove', function (e) {
@@ -382,13 +478,23 @@
             }
         };
 
+        //shake
+        const button = document.querySelector('button');
+        button.addEventListener('animationend', () => {
+            button.classList.remove('shake');
+        });
+
+        //markdown
         function updateText() {
             var out = marked.parse(textInput.value);
             section.innerHTML = out;
-            if (!otherWindow || otherWindow.closed) otherWindow = window.open('display.html', '_blank', 'width=500,height=500,location=1,menubar=0,toolbar=0,status=0,directories=0,scrollbars=1,resizable=1');
-            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) otherWindow.document.documentElement.setAttribute("data-theme", "light");
-            otherWindow.document.getElementById('text-output').innerHTML = out;
+            if (!otherWindow || otherWindow.closed) button.classList.add('shake'); else {
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches)
+                    otherWindow.document.documentElement.setAttribute("data-theme", "light");
+                otherWindow.document.getElementById('text-output').innerHTML = out;
+            }
         }
+        //dark mode
         const lightCheckbox = document.getElementById("light");
         if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) lightCheckbox.click(); else document.documentElement.setAttribute("data-theme", "light");
 
@@ -404,80 +510,80 @@
         });
         const textarea = document.getElementById("text-input");
 
-textarea.addEventListener("keydown", function(event) {
-  // Check if Ctrl key is pressed
-  if (event.ctrlKey) {
-    // Check for the various hotkey combinations
-    switch (event.key) {
-      case "b": // Bold
-        event.preventDefault();
-        formatText("**");
-        break;
-      case "i": // Italic
-        event.preventDefault();
-        formatText("_");
-        break;
-      case "u": // Underline
-        event.preventDefault();
-        formatText("__");
-        break;
-      case "s": // Strikethrough (modified to Ctrl+Shift+S)
-        if (event.shiftKey) {
-          event.preventDefault();
-          formatText("~~");
+        textInput.addEventListener("keydown", function (event) {
+            // Check if Ctrl key is pressed
+            if (event.ctrlKey) {
+                // Check for the various hotkey combinations
+                switch (event.key) {
+                    case "b": // Bold
+                        event.preventDefault();
+                        formatText("**");
+                        break;
+                    case "i": // Italic
+                        event.preventDefault();
+                        formatText("_");
+                        break;
+                    case "u": // Underline
+                        event.preventDefault();
+                        formatText("__");
+                        break;
+                    case "s": // Strikethrough (modified to Ctrl+Shift+S)
+                        if (event.shiftKey) {
+                            event.preventDefault();
+                            formatText("~~");
+                        }
+                        break;
+                    case "k": // Hyperlink
+                        event.preventDefault();
+                        insertLink();
+                        break;
+                }
+            }
+        });
+
+        function formatText(markup) {
+            // Get the current selected text and its start and end positions
+            const selectedText = textInput.value.substring(textInput.selectionStart, textInput.selectionEnd);
+            const start = textInput.selectionStart;
+            const end = textInput.selectionEnd;
+
+            // Check if the selected text already has the markup
+            if (selectedText.startsWith(markup) && selectedText.endsWith(markup)) {
+                // Remove the markup from the selected text
+                const newText = textInput.value.substring(0, start) + selectedText.substring(markup.length, selectedText.length - markup.length) + textInput.value.substring(end);
+
+                // Update the textInput with the new text and move the cursor to the end of the selected text
+                textInput.value = newText;
+                textInput.setSelectionRange(end - markup.length * 2, end - markup.length * 2);
+            } else {
+                // Add the markup to the selected text
+                const newText = textInput.value.substring(0, start) + markup + selectedText + markup + textInput.value.substring(end);
+
+                // Update the textInput with the new text and move the cursor to the end of the selected text
+                textInput.value = newText;
+                textInput.setSelectionRange(end + markup.length, end + markup.length);
+            }
         }
-        break;
-      case "k": // Hyperlink
-        event.preventDefault();
-        insertLink();
-        break;
-    }
-  }
-});
 
-function formatText(markup) {
-  // Get the current selected text and its start and end positions
-  const selectedText = textarea.value.substring(textarea.selectionStart, textarea.selectionEnd);
-  const start = textarea.selectionStart;
-  const end = textarea.selectionEnd;
+        function insertLink() {
+            // Prompt the user for the URL
+            const url = prompt("Enter the URL:");
 
-  // Check if the selected text already has the markup
-  if (selectedText.startsWith(markup) && selectedText.endsWith(markup)) {
-    // Remove the markup from the selected text
-    const newText = textarea.value.substring(0, start) + selectedText.substring(markup.length, selectedText.length - markup.length) + textarea.value.substring(end);
+            // Get the current selected text and its start and end positions
+            const selectedText = textInput.value.substring(textInput.selectionStart, textInput.selectionEnd);
+            const start = textInput.selectionStart;
+            const end = textInput.selectionEnd;
 
-    // Update the textarea with the new text and move the cursor to the end of the selected text
-    textarea.value = newText;
-    textarea.setSelectionRange(end - markup.length * 2, end - markup.length * 2);
-  } else {
-    // Add the markup to the selected text
-    const newText = textarea.value.substring(0, start) + markup + selectedText + markup + textarea.value.substring(end);
+            // Create the link markup with the selected text as the display text
+            const linkMarkup = `[${selectedText}](${url})`;
 
-    // Update the textarea with the new text and move the cursor to the end of the selected text
-    textarea.value = newText;
-    textarea.setSelectionRange(end + markup.length, end + markup.length);
-  }
-}
+            // Replace the selected text with the link markup
+            const newText = textInput.value.substring(0, start) + linkMarkup + textInput.value.substring(end);
+            textInput.value = newText;
 
-function insertLink() {
-  // Prompt the user for the URL
-  const url = prompt("Enter the URL:");
-
-  // Get the current selected text and its start and end positions
-  const selectedText = textarea.value.substring(textarea.selectionStart, textarea.selectionEnd);
-  const start = textarea.selectionStart;
-  const end = textarea.selectionEnd;
-
-  // Create the link markup with the selected text as the display text
-  const linkMarkup = `[${selectedText}](${url})`;
-
-  // Replace the selected text with the link markup
-  const newText = textarea.value.substring(0, start) + linkMarkup + textarea.value.substring(end);
-  textarea.value = newText;
-
-  // Set the cursor position at the end of the link markup
-  textarea.setSelectionRange(start + linkMarkup.length, start + linkMarkup.length - url.length);
-}
+            // Set the cursor position at the end of the link markup
+            textInput.setSelectionRange(start + linkMarkup.length, start + linkMarkup.length - url.length);
+        }
 
 
     </script>
